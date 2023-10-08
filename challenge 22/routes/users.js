@@ -31,7 +31,7 @@ module.exports = function (db) {
 
       const users = await User.find(params).sort(sort).limit(limit).skip(offset).toArray();
       res.json({
-        users,
+        data: users,
         total,
         pages,
         page,
@@ -39,7 +39,6 @@ module.exports = function (db) {
         offset
       })
     } catch (err) {
-      console.log(err)
       res.status(500).json({ err })
     }
   });
@@ -59,7 +58,7 @@ module.exports = function (db) {
   router.post('/', async function (req, res, next) {
     try {
       const { name, phone } = req.body
-      const users = await User.insertOne({ name: name, phone: phone })
+      const users = await User.insertOne({ name, phone })
       res.status(201).json(users)
     } catch (err) {
       res.status(500).json({ err })
@@ -82,7 +81,7 @@ module.exports = function (db) {
     try {
       const { name, phone } = req.body
       const id = req.params.id
-      const users = await User.updateOne({ _id: new ObjectId(id) }, { $set: { name: name, phone: phone } })
+      const users = await User.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { name: name, phone: phone } })
       res.status(201).json(users)
     } catch (err) {
       res.status(500).json({ err })

@@ -1,4 +1,3 @@
-
 var express = require('express');
 const { ObjectId } = require('mongodb');
 var router = express.Router();
@@ -62,9 +61,10 @@ module.exports = function (db) {
     // CREATE USER
     router.post('/', async function (req, res, next) {
         try {
-            const { name, phone } = req.body
-            const users = await User.insertOne({ name: name, phone: phone })
-            res.status(201).json(users)
+            const { title, executor } = req.body
+            const user = await User.findOne({ _id: ObjectId(executor) })
+            const todos = await Todo.insertOne({title, complete: false, deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), executor: user._id})
+            res.status(201).json(todos)
         } catch (err) {
             res.status(500).json({ err })
         }
