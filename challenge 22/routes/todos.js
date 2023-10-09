@@ -2,6 +2,7 @@ var express = require('express');
 const { ObjectId } = require('mongodb');
 var router = express.Router();
 
+
 module.exports = function (db) {
 
     const Todo = db.collection('todos')
@@ -38,8 +39,7 @@ module.exports = function (db) {
                 total,
                 pages,
                 page,
-                limit,
-                offset
+                limit
             })
         } catch (err) {
             console.log(err)
@@ -62,7 +62,7 @@ module.exports = function (db) {
     router.post('/', async function (req, res, next) {
         try {
             const { title, executor } = req.body
-            const user = await User.findOne({ _id: ObjectId(executor) })
+            const user = await User.findOne({ _id: new ObjectId(executor) })
             const todos = await Todo.insertOne({title, complete: false, deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), executor: user._id})
             res.status(201).json(todos)
         } catch (err) {
@@ -74,8 +74,13 @@ module.exports = function (db) {
     router.delete('/:id', async function (req, res, next) {
         try {
             const id = req.params.id
-            const users = await User.findOneAndDelete({ _id: new ObjectId(id) })
-            res.status(200).json(users)
+            const todos = await Todo.findOneAndDelete({ _id: new ObjectId(id) })
+
+            if(todos) {
+                res.status(200).json(todos)
+            } else {
+                res.status(500).json({ message: 'Todo Not Found'})
+            }
         } catch (err) {
             res.status(500).json({ err })
         }
@@ -84,10 +89,14 @@ module.exports = function (db) {
     // UPDATE USER
     router.put('/:id', async function (req, res, next) {
         try {
-            const { name, phone } = req.body
+            const { title, deadline, complete } = req.body
             const id = req.params.id
-            const users = await User.updateOne({ _id: new ObjectId(id) }, { $set: { name: name, phone: phone } })
-            res.status(201).json(users)
+            const todos = await Todo.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { title: title, deadline: deadline, complete: complete } })
+            if(todos) {
+                res.status(201).json(todos)
+            } else {
+                res.status(500).json({message: `Todo Not Found`})
+            }
         } catch (err) {
             res.status(500).json({ err })
         }
