@@ -5,11 +5,16 @@
     </div>
     <div class="search">
       <div class="show-data">
-        <div class="input-group mb-1">
+        <form class="input-group mb-1">
           <span class="input-group-text">Show</span>
-          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-          <span class="input-group-text"></span>
-        </div>
+          <select style="border-radius: 5px;" type="text" class="form-control"
+            aria-label="Amount (to the nearest dollar)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="0">all</option>
+          </select>
+          <span class="input-group-text">entries</span>
+        </form>
 
       </div>
       <div class="search-input">
@@ -29,7 +34,6 @@
           <thead>
             <tr>
               <th class="id">No.</th>
-
               <th class="title">
                 <div class="sort-wrapper">
                   <div class="sort">
@@ -65,12 +69,12 @@
           </tbody>
         </table>
       </div>
-      <div class="container-button">
-        <a href="" class="btn btn-primary"><i class="fa-solid fa-plus" style="color: #ffffff;"></i></a>
+      <div class="position-relative" style="padding: 20px; box-shadow: 0px 0px 5px rgb(167, 167, 167);">
+        <button class="btn btn-primary"><i class="fa-solid fa-plus" style="color: #ffffff;"></i></button>
         <!-- add-list -->
-        <div class="pagination">
-        </div>
+        <div id="pagination" class="position-absolute top-50 end-0 translate-middle-y">
 
+        </div>
       </div>
     </div>
     <%- include('./partials/userFooter') %>
