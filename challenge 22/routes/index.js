@@ -4,7 +4,7 @@ var router = express.Router();
 
 module.exports = function (db) {
   router.get('/', function (req, res, next) {
-    res.json({ title: 'Express' });
+    res.render('index') 
   });
   return router
 }

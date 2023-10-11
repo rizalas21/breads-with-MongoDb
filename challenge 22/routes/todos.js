@@ -16,15 +16,16 @@ module.exports = function (db) {
             sort[sortBy] = sortMode
             const params = {}
 
+
             if (executor) params['executor'] = executor
             if (title) params['title'] = new RegExp(title, 'i')
-            if (complete) params['complete'] = complete
+            if (complete) params['complete'] = JSON.parse(complete)
             if (strdeadline && enddeadline) {
-                params['deadline'] = { '$gte': strdeadline, '$lte': enddeadline }
+                params['deadline'] = {deadline: {$gt: new Date(strdeadline), $lt: new Date (enddeadline)}}
             } else if (strdeadline) {
-                params['deadline'] = { 'gte': strdeadline }
+                params['deadline'] = { $gte: new Date(strdeadline) }
             } else if (enddeadline) {
-                params['deadline'] = { '$lte': enddeadline }
+                params['deadline'] = { $lte: new Date (enddeadline) }
             }
 
             const limit = 5

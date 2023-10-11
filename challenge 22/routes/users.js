@@ -44,7 +44,7 @@ module.exports = function (db) {
   });
 
   // SEARCH User
-  router.get('/:id', async function(req, res, next) {
+  router.get('/:id', async function (req, res, next) {
     try {
       const id = req.params.id
       const users = await User.findOne({ _id: new ObjectId(id) })
