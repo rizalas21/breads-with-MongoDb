@@ -69,55 +69,62 @@
           </tbody>
         </table>
       </div>
+      <!-- ini buat add -->
       <div class="position-relative" style="padding: 20px; box-shadow: 0px 0px 5px rgb(167, 167, 167);">
-        <button class="btn btn-primary"><i class="fa-solid fa-plus" style="color: #ffffff;"></i></button>
-        <!-- add-list -->
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addingData"><i class="fa-solid fa-plus"
+            style="color: #ffffff;"></i></button>
+
+        <div class="modal fade" id="addingData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">User Form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" style="display: flex; justify-content: center;">
+                <form class="form-container" id="form-user">
+                  <div class="form-add">
+                    <label for="name">Name</label>
+                    <input class="input-add" type="text" id="name" required>
+                  </div>
+                  <div class="form-add">
+                    <label for="phone">Phone</label>
+                    <input class="input-add" type="text" id="phone" required>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ini add selesai -->
+
+        <!-- ini untuk Delete -->
+        <div class="modal fade" id="deleteData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Comfirmation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>are you sure?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button id="btn-delete" type="submit" class="btn btn-primary">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- pagination -->
         <div id="pagination" class="position-absolute top-50 end-0 translate-middle-y">
 
         </div>
       </div>
     </div>
-    <script>
-      const readData = async () => {
-        const response = await fetch("http://localhost:3000/api/users");
-        const users = await response.json();
-        let html = '';
-        users.data.forEach((item, index) => {
-          html += `
-          <tr>
-              <th scope="row">${index + 1}</th>
-              <td scope="row">${item.name}</td>
-              <td scope="row">${item.phone}</td>
-              <td scope="row">
-                <button type="button" class="btn btn-success">
-                  <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
-                </button>&nbsp;
-                <button type="button" class="btn btn-danger">
-                  <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
-                </button>&nbsp;
-                <button type="button" class="btn btn-warning">
-                  <i class="fa-solid fa-right-to-bracket"></i>
-                </button>&nbsp;
-              </td>
-          </tr>
-          `
-        })
-        document.getElementById('users-table-tbody').innerHTML = html
-      }
-      readData()
-
-      const addData = async () => {
-        const name = document.getElementById('name').value
-        const phone = document.getElementById('phone').value
-        const response = await fetch("http://localhost:3000/api/users", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, phone }),
-        })
-        const users = await response.json();
-        readData()
-      }
-    </script>
     <%- include('./partials/userFooter') %>

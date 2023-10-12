@@ -125,3 +125,22 @@ th.action {
 .container-button {
   background-color: aqua;
 }
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 70%;
+}
+
+.form-add {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.input-add {
+  border: 1px solid black;
+  border-radius: 5px;
+}
