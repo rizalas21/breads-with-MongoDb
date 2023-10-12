@@ -30,7 +30,7 @@
     <div class="container-form">
       <!-- ini table -->
       <div class="table-list">
-        <table>
+        <table id="users-table" class="table table-striped">
           <thead>
             <tr>
               <th class="id">No.</th>
@@ -64,7 +64,7 @@
               <th scope="col" class="action">Action</th>
             </tr>
           </thead>
-          <tbody id="table-tbody">
+          <tbody id="users-table-tbody">
 
           </tbody>
         </table>
@@ -77,4 +77,47 @@
         </div>
       </div>
     </div>
+    <script>
+      const readData = async () => {
+        const response = await fetch("http://localhost:3000/api/users");
+        const users = await response.json();
+        let html = '';
+        users.data.forEach((item, index) => {
+          html += `
+          <tr>
+              <th scope="row">${index + 1}</th>
+              <td scope="row">${item.name}</td>
+              <td scope="row">${item.phone}</td>
+              <td scope="row">
+                <button type="button" class="btn btn-success">
+                  <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
+                </button>&nbsp;
+                <button type="button" class="btn btn-danger">
+                  <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+                </button>&nbsp;
+                <button type="button" class="btn btn-warning">
+                  <i class="fa-solid fa-right-to-bracket"></i>
+                </button>&nbsp;
+              </td>
+          </tr>
+          `
+        })
+        document.getElementById('users-table-tbody').innerHTML = html
+      }
+      readData()
+
+      const addData = async () => {
+        const name = document.getElementById('name').value
+        const phone = document.getElementById('phone').value
+        const response = await fetch("http://localhost:3000/api/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, phone }),
+        })
+        const users = await response.json();
+        readData()
+      }
+    </script>
     <%- include('./partials/userFooter') %>

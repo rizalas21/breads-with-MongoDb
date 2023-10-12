@@ -5,9 +5,12 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
 }
 
-table{
+table {
   width: 100%;
 }
 

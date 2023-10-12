@@ -41,8 +41,8 @@ main()
     app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
     app.use('/', indexRouter);
-    app.use('/users', usersRouter);
-    app.use('/todos', todosRouter);
+    app.use('/api/users', usersRouter);
+    app.use('/api/todos', todosRouter);
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
