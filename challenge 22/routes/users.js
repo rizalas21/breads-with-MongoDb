@@ -1,4 +1,3 @@
-
 var express = require('express');
 const { ObjectId } = require('mongodb');
 var router = express.Router();
@@ -47,8 +46,8 @@ module.exports = function (db) {
   router.get('/:id', async function (req, res, next) {
     try {
       const id = req.params.id
-      const users = await User.findOne({ _id: new ObjectId(id) })
-      res.status(200).json(users)
+      const user = await User.findOne({ _id: new ObjectId(id) })
+      res.status(200).json(user)
     } catch (error) {
       res.status(500).json({ err })
     }

@@ -6,5 +6,10 @@ module.exports = function (db) {
   router.get('/', function (req, res, next) {
     res.render('index') 
   });
+
+  router.get('/users/:id/todos', function (req, res, next) {
+    const id = req.params.id
+    res.render('todos', {id}) 
+  });
   return router
 }

@@ -8,7 +8,7 @@
         <form class="input-group mb-1">
           <span class="input-group-text">Show</span>
           <select style="border-radius: 5px;" type="text" class="form-control"
-            aria-label="Amount (to the nearest dollar)">
+            aria-label="Amount (to the nearest dollar)" onchange="" id="limit">
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="0">all</option>
@@ -91,12 +91,12 @@
                     <label for="phone">Phone</label>
                     <input class="input-add" type="text" id="phone" required>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                  </div>
-                </form>
               </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -120,7 +120,37 @@
             </div>
           </div>
         </div>
-        
+        <!-- delete selesai  -->
+
+        <!-- ini untuk update -->
+        <div class="modal fade" id="updateData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">User Form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" style="display: flex; justify-content: center;">
+                <form class="form-container" id="form-user">
+                  <div class="form-add">
+                    <label for="name">Name</label>
+                    <input class="input-add" type="text" id="uname" required>
+                  </div>
+                  <div class="form-add">
+                    <label for="phone">Phone</label>
+                    <input class="input-add" type="text" id="uphone" required>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="btn-update" type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- update selesai  -->
+
         <!-- pagination -->
         <div id="pagination" class="position-absolute top-50 end-0 translate-middle-y">
 
