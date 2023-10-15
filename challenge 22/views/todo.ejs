@@ -1,24 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('./partials/headerTodo') %>
+  <div class="container-list">
+    <h1 class="h1-title">BREADS (Browse, Read, Edit, Add, Delete, Sort)</h1>
+        <div class="container-form">
+            <!-- ini fitur search -->
+            <form action="/users" method="get" class="add-container">
+                <div class="form-list">
+                    <div class="inline">
+                        <label for="name">title</label>
+                        <div class="container-input">
+                            <input type="text" class="add-box" name="title" placeholder="insert your title"/>
+                        </div>
+                    </div>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MongoDB BREADS(Browse, Read, Edit, Add, Delete, Sort)</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/stylesheets/fontawesome/css/all.css">
-</head>
+                    <div class="inline">
+                        <label for="deadline">Deadline</label>
+                        <div class="container-input-birthdate">
+                            <input type="date" class="add-box" name='startdate' />
+                            <div class="sd">
+                                <p> s.d </p>
+                            </div>
+                            <input type="date" class="add-box" name='enddate' />
+                        </div>
+                    </div>
 
-<body>
-  <button class="btn btn-primary">makan</button>
+                    <div class="container-married">
+                        <label id="complete-option" for="complete">Complete</label>
+
+                    </div>
+                    <!-- trakhir submit mahh -->
+                    <div class="button-add">
+                        <button type="submit" class="btn btn-info"><i
+                                class="fa-solid fa-magnifying-glass"></i></i></button>&nbsp;
+                        <!-- class="add-submit"> -->
+                        <a class="btn btn-warning" href="/users"><i class="fa-solid fa-arrows-rotate"></i></a>
+                        <!-- add-cance -->
+                    </div>
+                </div>
+            </form>
+
+            <!-- search SELESAI -->
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
-    <script>
-      const id = "<%= id %>"
-      
-    </script>
-</body>
+  <script>
+    const id = "<%= id %>"
 
-</html>
+  </script>
+  <%- include('./partials/userFooter') %>

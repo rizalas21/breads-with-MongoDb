@@ -1,6 +1,6 @@
-const id = null
+let id = null
 const limit = document.getElementById('limit'). value || 10
-const page = 1;
+// const page = 1;
 
 function setId(_id) {
     id = _id
@@ -33,7 +33,7 @@ document.getElementById('btn-update').addEventListener('click', function (event)
     updateData()
 })
 
-const readData = async () => {
+const readData = async (page = 1) => {
     try {
         const response = await fetch(
             `http://localhost:3000/api/users/?page=${page}`
@@ -41,11 +41,12 @@ const readData = async () => {
         const users = await response.json();
         let html = '';
         const pagination = "";
-        const pageNumber = "";
+        let pageNumber = "";
+        const offset = users.offset
         users.data.forEach((item, index) => {
             html += `
           <tr>
-              <th scope="row">${index + 1}</th>
+              <th scope="row">${index + offset + 1}</th>
               <td scope="row">${item.name}</td>
               <td scope="row">${item.phone}</td>
               <td scope="row">
@@ -55,7 +56,7 @@ const readData = async () => {
                 <button onclick="setId('${item._id}')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteData">
                   <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
                 </button>&nbsp;
-                <a class="btn btn-warning">
+                <a class="btn btn-warning" href="/users/${item._id}/todos">
                   <i class="fa-solid fa-right-to-bracket"></i>
                 </a>&nbsp;
               </td>
@@ -63,7 +64,11 @@ const readData = async () => {
           `
         })
 
-        for(let i = 1; i < users.pages; i++) pageNumber += `<li class>`
+        for(let i = 1; i <= users.pages; i++){
+            pageNumber += `<button class="${page == i ? 'btn btn-warning' : ''}" id="button-pagination" onclick="changePage(${i})">${i}</button>`
+        }
+
+        document.getElementById('pagination').innerHTML = pageNumber
 
         document.getElementById('users-table-tbody').innerHTML = html
     } catch (err) { console.log(err) }
@@ -99,6 +104,10 @@ const getData = async (id) => {
         document.getElementById('uphone').value = user.phone
         updateForm.show()
     } catch (error) {console.log('ini errornya => ',error)}
+}
+
+const changePage = async (number) => {
+    readData(number)
 }
 
 const updateData = async () => {

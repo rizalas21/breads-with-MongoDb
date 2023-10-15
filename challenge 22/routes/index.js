@@ -9,7 +9,7 @@ module.exports = function (db) {
 
   router.get('/users/:id/todos', function (req, res, next) {
     const id = req.params.id
-    res.render('todos', {id}) 
+    res.render('todo', {id}) 
   });
   return router
 }
