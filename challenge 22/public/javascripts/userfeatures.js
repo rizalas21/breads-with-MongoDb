@@ -1,6 +1,5 @@
 let id = null
-const limit = document.getElementById('limit'). value || 10
-// const page = 1;
+let limit = document.getElementById('limit').value || 10
 
 function setId(_id) {
     id = _id
@@ -33,11 +32,14 @@ document.getElementById('btn-update').addEventListener('click', function (event)
     updateData()
 })
 
+
 const readData = async (page = 1) => {
     try {
+        const selectedLimit = document.getElementById("limit").value
+        limit = selectedLimit || limit;
         const response = await fetch(
-            `http://localhost:3000/api/users/?page=${page}`
-            );
+            `http://localhost:3000/api/users/?page=${page}&limit=${limit}`
+        );
         const users = await response.json();
         let html = '';
         const pagination = "";
@@ -64,7 +66,7 @@ const readData = async (page = 1) => {
           `
         })
 
-        for(let i = 1; i <= users.pages; i++){
+        for (let i = 1; i <= users.pages; i++) {
             pageNumber += `<button class="${page == i ? 'btn btn-warning' : ''}" id="button-pagination" onclick="changePage(${i})">${i}</button>`
         }
 
@@ -78,8 +80,8 @@ readData()
 // ini fitur user
 const addData = async () => {
     try {
-        const name = document.getElementById('name').value
-        const phone = document.getElementById('phone').value
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
         const response = await fetch("http://localhost:3000/api/users", {
             method: "POST",
             headers: {
@@ -91,7 +93,10 @@ const addData = async () => {
 
         readData()
         addForm.hide()
-    }catch(err){console.log(err)}
+        document.getElementById('name').value = '';
+        document.getElementById('phone').value = '';
+
+    } catch (err) { console.log(err) }
 }
 
 const getData = async (id) => {
@@ -103,7 +108,7 @@ const getData = async (id) => {
         document.getElementById('uname').value = user.name
         document.getElementById('uphone').value = user.phone
         updateForm.show()
-    } catch (error) {console.log('ini errornya => ',error)}
+    } catch (error) { console.log('ini errornya => ', error) }
 }
 
 const changePage = async (number) => {
@@ -113,7 +118,6 @@ const changePage = async (number) => {
 const updateData = async () => {
     const name = document.getElementById('uname').value
     const phone = document.getElementById('uphone').value
-    console.log(id, name, phone)
     const response = await fetch(`http://localhost:3000/api/users/${id}`, {
         method: "PUT",
         headers: {
@@ -146,7 +150,6 @@ const deleteData = async () => {
 
 // ini fitur limit
 const setLimit = async () => {
-    limit = document.getElementById('limit')
-    page = 1
+    limit = document.getElementById('limit').value
     readData()
 }

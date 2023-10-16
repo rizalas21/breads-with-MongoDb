@@ -9,7 +9,7 @@ module.exports = function (db) {
   // GET users
   router.get('/', async function (req, res, next) {
     try {
-      const { page = 1, name, phone, sortBy='_id', sortMode='desc' } = req.query
+      const { page = 1, limit, name, phone, sortBy='_id', sortMode='desc' } = req.query
       const sort = {}
       sort[sortBy] = sortMode == 'asc' ? 1 : -1
       const params = {}
@@ -22,7 +22,6 @@ module.exports = function (db) {
         params['phone'] = new RegExp(phone, 'i')
       }
 
-      const limit = 5
       const offset = (page - 1) * limit
 
       const total = await User.count(params)

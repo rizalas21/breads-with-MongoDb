@@ -8,7 +8,7 @@
         <form class="input-group mb-1">
           <span class="input-group-text">Show</span>
           <select style="border-radius: 5px;" type="text" class="form-control"
-            aria-label="Amount (to the nearest dollar)" onchange="" id="limit">
+            aria-label="Amount (to the nearest dollar)" onchange="setLimit()" id="limit">
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="0">all</option>
@@ -143,7 +143,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button id="btn-update" type="submit" class="btn btn-primary">Sa change</button>
+                <button id="btn-update" type="submit" class="btn btn-primary">Save change</button>
               </div>
               </form>
             </div>
