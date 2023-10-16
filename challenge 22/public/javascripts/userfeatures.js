@@ -32,11 +32,8 @@ document.getElementById('btn-update').addEventListener('click', function (event)
     updateData()
 })
 
-
 const readData = async (page = 1) => {
     try {
-        const selectedLimit = document.getElementById("limit").value
-        limit = selectedLimit || limit;
         const response = await fetch(
             `http://localhost:3000/api/users/?page=${page}&limit=${limit}`
         );
@@ -150,6 +147,7 @@ const deleteData = async () => {
 
 // ini fitur limit
 const setLimit = async () => {
-    limit = document.getElementById('limit').value
+    limit =     document.getElementById('limit').value 
+    page = 1
     readData()
 }
