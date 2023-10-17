@@ -9,7 +9,7 @@ module.exports = function (db) {
   // GET users
   router.get('/', async function (req, res, next) {
     try {
-      const { page = 1, limit = 5, name, phone, sortBy='_id', sortMode='desc' } = req.query
+      const { page = 1, limit, search = '', name, phone, sortBy='_id', sortMode='desc' } = req.query
       const sort = {}
       sort[sortBy] = sortMode == 'asc' ? 1 : -1
       const params = {}
@@ -22,12 +22,13 @@ module.exports = function (db) {
         params['phone'] = new RegExp(phone, 'i')
       }
 
+
       const offset = (page - 1) * limit
 
       const total = await User.count(params)
       const pages = Math.ceil(total / limit)
 
-      const users = await User.find(params).sort(sort).limit(limit).skip(offset).toArray();
+      const users = await User.find(params).sort(sort).limit(parseInt(limit)).skip(offset).toArray();
       res.json({
         data: users,
         total,

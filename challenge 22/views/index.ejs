@@ -18,11 +18,11 @@
 
       </div>
       <div class="search-input">
-        <input class="input-search" type="text">
-        <div class="button-search">
-          <button type="button" class="btn btn-outline-secondary">><i class="fa-solid fa-magnifying-glass"
+        <input id="input-search" class="input-search" oninput="find()" type="text">
+        <div class="button-search">&nbsp; 
+          <button onclick="find()" type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-magnifying-glass"
               style="color: #77767b;"></i></button>
-          <button type="button" class="btn btn-outline-warning"><i class="fa-solid fa-rotate"
+          <button onclick="reset()" type="button" class="btn btn-outline-warning"><i class="fa-solid fa-rotate"
               style="color: #f6d32d;"></i></button>
         </div>
       </div>

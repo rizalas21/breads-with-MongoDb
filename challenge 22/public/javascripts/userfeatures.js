@@ -1,5 +1,6 @@
-let id = null
-let limit = document.getElementById('limit').value || 10
+let id = null;
+let limit = document.getElementById('limit').value || 10;
+let search = '';
 
 function setId(_id) {
     id = _id
@@ -32,11 +33,31 @@ document.getElementById('btn-update').addEventListener('click', function (event)
     updateData()
 })
 
+async function find() {
+    try {
+        let getSearch = document.getElementById("input-search").value;
+        search = getSearch.toString()
+        readData()
+    } catch (error) {
+        console.log('ini errornya =>', error)
+    }
+}
+
+async function reset() {
+    try {
+    search = document.getElementById("input-search").value = "";
+    readData()
+} catch(err) {
+    console.log('ini error nya bro => ',err)
+}
+}
+
 const readData = async (page = 1) => {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/users/?page=${page}&limit=${limit}`
+            `http://localhost:3000/api/users/?page=${page}&limit=${limit}&search=${search}`
         );
+        console.log('ini response', response)
         const users = await response.json();
         let html = '';
         const pagination = "";
@@ -45,10 +66,10 @@ const readData = async (page = 1) => {
         users.data.forEach((item, index) => {
             html += `
           <tr>
-              <th scope="row">${index + offset + 1}</th>
-              <td scope="row">${item.name}</td>
-              <td scope="row">${item.phone}</td>
-              <td scope="row">
+              <th class="number" scope="row">${index + offset + 1}</th>
+              <td class="tname" scope="row">${item.name}</td>
+              <td class="tphone" scope="row">${item.phone}</td>
+              <td class="tbutton" scope="row">
                 <button type="button" onclick="getData('${item._id}')" class="btn btn-success">
                   <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
                 </button>&nbsp;
@@ -147,7 +168,7 @@ const deleteData = async () => {
 
 // ini fitur limit
 const setLimit = async () => {
-    limit =     document.getElementById('limit').value 
+    limit = document.getElementById('limit').value
     page = 1
     readData()
 }
