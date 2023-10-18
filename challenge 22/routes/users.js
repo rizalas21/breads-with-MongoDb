@@ -9,19 +9,14 @@ module.exports = function (db) {
   // GET users
   router.get('/', async function (req, res, next) {
     try {
-      const { page = 1, limit, search = '', name, phone, sortBy='_id', sortMode='desc' } = req.query
+      const { page = 1, limit, search = '', sortBy = '_id', sortMode = 'desc' } = req.query
       const sort = {}
       sort[sortBy] = sortMode == 'asc' ? 1 : -1
       const params = {}
 
-      if (name) {
-        params['name'] = new RegExp(name, 'i')
+      if (search) {
+        params['$or'] = [{ "name": new RegExp(search, 'i') }, { "phone": new RegExp(search, 'i') }]
       }
-
-      if (phone) {
-        params['phone'] = new RegExp(phone, 'i')
-      }
-
 
       const offset = (page - 1) * limit
 
@@ -49,7 +44,7 @@ module.exports = function (db) {
       const user = await User.findOne({ _id: new ObjectId(id) })
       res.status(200).json(user)
     } catch (error) {
-      res.status(500).json({ err })
+      res.status(500).json({ error })
     }
   })
 
