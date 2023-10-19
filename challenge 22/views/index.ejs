@@ -18,10 +18,10 @@
 
       </div>
       <div class="search-input">
-        <input id="input-search" class="input-search" oninput="find()" type="text">
-        <div class="button-search">&nbsp; 
-          <button onclick="find()" type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-magnifying-glass"
-              style="color: #77767b;"></i></button>
+        <input id="input-search" class="input-search" type="text">
+        <div class="button-search">&nbsp;
+          <button onclick="find()" type="button" class="btn btn-outline-secondary"><i
+              class="fa-solid fa-magnifying-glass" style="color: #77767b;"></i></button>
           <button onclick="reset()" type="button" class="btn btn-outline-warning"><i class="fa-solid fa-rotate"
               style="color: #f6d32d;"></i></button>
         </div>
@@ -34,32 +34,24 @@
           <thead>
             <tr>
               <th class="id">No.</th>
-              <th class="title">
-                <div class="sort-wrapper">
-                  <div class="sort">
-                    <a class="sort-button" href="">
-                      <i class="fa-solid fa-caret-up"></i>
-                    </a>
-                    <a class="sort-button" href="">
-                      <i class="fa-solid fa-caret-down"></i>
-                    </a>
+              <!-- .title, .sort-wrapper. .sort, sort-button,  -->
+              <th class="title" id="btn-name">
+                <button type="button" class="btn p-0" onclick="sortNameAsc('name')">
+                  <div class="d-inline-block position-relative" style="height: 10px;">
+                    <i class="fa-solid fa-caret-up position-absolute bottom-0 start-0 p-0"></i>
+                    <i class="fa-solid fa-caret-down position-absolute top-0 start-0 p-0"></i>
                   </div>
-                  &nbsp;Name
-                </div>
+                </button>
+                <span class="ms-3 fw-bold">Name</span>
               </th>
-
-              <th class="deadline">
-                <div class="sort-wrapper">
-                  <div class="sort">
-                    <a class="sort-button" href="">
-                      <i class="fa-solid fa-caret-up"></i>
-                    </a>
-                    <a class="sort-button" href="">
-                      <i class="fa-solid fa-caret-down"></i>
-                    </a>
+              <th class="deadline" id="btn-phone">
+                <button type="button" class="btn p-0" onclick="sortPhoneAsc('phone')">
+                  <div class="d-inline-block position-relative" style="height: 10px;">
+                    <i class="fa-solid fa-caret-up position-absolute bottom-0 start-0 p-0"></i>
+                    <i class="fa-solid fa-caret-down position-absolute top-0 start-0 p-0"></i>
                   </div>
-                  &nbsp;Phone
-                </div>
+                </button>
+                <span class="ms-3 fw-bold">Phone</span>
               </th>
               <th scope="col" class="action">Action</th>
             </tr>
@@ -152,8 +144,10 @@
         <!-- update selesai  -->
 
         <!-- pagination -->
-        <div id="pagination" class="pagination">
-
+        <div class="container-button">
+          <div id="pagination" class="pagination">
+            
+          </div>
         </div>
       </div>
     </div>

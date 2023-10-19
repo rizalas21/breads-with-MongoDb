@@ -127,7 +127,9 @@ th.action {
 }
 
 .container-button {
-  background-color: aqua;
+  width: 95%;
+  display: inline-flex;
+  justify-content: end;
 }
 
 .form-container {
@@ -155,4 +157,9 @@ th.action {
 
 .tname {
   margin-left: 1000px;
+}
+
+.bpage {
+  display: inline-flex;
+  margin-left: 10px;
 }
