@@ -129,6 +129,7 @@ const readData = async (page = 1) => {
         let pageNumber = "";
         const offset = users.offset
         users.data.forEach((item, index) => {
+            console.log(item)
             html += `
           <tr>
               <th class="number" scope="row">${index + offset + 1}</th>

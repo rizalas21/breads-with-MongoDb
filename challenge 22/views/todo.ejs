@@ -3,57 +3,59 @@
         <div class="h1-wrapper">
             <h1>Todo List</h1>
         </div>
-        <div class="container">
-            <div class="search-wrapper">
-                <div class="title-search">
-                    <label for="title">Title</label>
-                    <input class="input" type="text" placeholder="insert your title">
-                </div>
-                <div class="deadline-search">
-                    <label for="deadline">Deadline</label>
-                    <div class="str-end">
-                        <input class="input" type="date">&nbsp;
-                        <p>s.d.</p>&nbsp;
-                        <input class="input" type="date">
+        <div class="container" style="padding: 0px;">
+            <div class="container-search">
+                <div class="search-wrapper">
+                    <div class="title-search">
+                        <label for="title">Title</label>
+                        <input class="input" type="text" placeholder="insert your title">
                     </div>
-                </div>
-                <div class="complete-search">
-                    <label for="complete">Complete</label>
-                    <select class="input" style="background-color: #ffffff;" name="complete" id="complete-choose">
-                        <option value="true">Done</option>
-                        <option value="false">Not Yet</option>
-                    </select>
-                </div>
-                <div class="btn btn-success" style="display: inline-flex;
-                flex-direction: row;
-                justify-content: baseline;
-                width: 16%;">
-                    <div class="sort-wrapper">
-                        <div class="sort">
-                            <a class="sort-button" href="">
-                                <i class="fa-solid fa-caret-up"></i>
-                            </a>
-                            <a class="sort-button" href="">
-                                <i class="fa-solid fa-caret-down"></i>
-                            </a>
+                    <div class="deadline-search">
+                        <label for="deadline">Deadline</label>
+                        <div class="str-end">
+                            <input class="input" type="date">&nbsp;
+                            <p>s.d.</p>&nbsp;
+                            <input class="input" type="date">
                         </div>
-                    </div>&nbsp;
-                    <p>sort by deadline </p>
+                    </div>
+                    <div class="complete-search">
+                        <label for="complete">Complete</label>
+                        <select class="input" style="background-color: #ffffff;" name="complete" id="complete-choose">
+                            <option value="true">Done</option>
+                            <option value="false">Not Yet</option>
+                        </select>
+                    </div>
+                    <div class="complete-search">
+                        <div class="btn btn-success">
+                            <button type="button" class="btn p-0" onclick="sortNameAsc('name')">
+                                <div class="d-inline-block position-relative" style="height: 10px;">
+                                    <i class="fa-solid fa-caret-up position-absolute bottom-0 start-0 p-0"
+                                        style="color: #ffffff;"></i>
+                                    <i class="fa-solid fa-caret-down position-absolute top-0 start-0 p-0"
+                                        style="color: #ffffff;"></i>
+                                </div>
+                            </button>
+                            <span class="ms-3 fw-bold">sort by deadline</span>
+                        </div>
+                        <div class="input">
+                            <button class="btn btn-warning"><i class="fa-solid fa-arrows-rotate"></i></button>&nbsp;
+                            <button class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="search-input-wrapper">
-
+                <input type="text" class="input-search">&nbsp;
+                <button class="btn btn-outline-primary"><i class="fa-solid fa-circle-arrow-down"
+                        style="color: #3584e4;"></i></button>
             </div>
-            <div class="container-Todo">
+            <div class="container-todo" id="todo-list">
 
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
+    <%- include('./partials/todoFooter') %>
     <script>
-        const id = "<%= id %>"
+        const executorId = "<%= 'id' %>"
 
     </script>
-    <%- include('./partials/userFooter') %>

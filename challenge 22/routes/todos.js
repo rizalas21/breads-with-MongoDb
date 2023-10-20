@@ -2,7 +2,6 @@ var express = require('express');
 const { ObjectId } = require('mongodb');
 var router = express.Router();
 
-
 module.exports = function (db) {
 
     const Todo = db.collection('todos')
@@ -11,7 +10,7 @@ module.exports = function (db) {
     // GET users
     router.get('/', async function (req, res, next) {
         try {
-            const { page = 1, title, complete, strdeadline, enddeadline, sortBy = '_id', sortMode, executor } = req.query
+            const { page = 1, title, complete, strdeadline, enddeadline, sortBy = '_id', sortMode, limit = 10, executor } = req.query
             const sort = {}
             sort[sortBy] = sortMode
             const params = {}
@@ -28,12 +27,11 @@ module.exports = function (db) {
                 params['deadline'] = { $lte: new Date (enddeadline) }
             }
 
-            const limit = 5
             const offset = (page - 1) * limit
 
             const total = await Todo.count(params)
             const pages = Math.ceil(total / limit)
-
+             
             const todos = await Todo.find(params).sort(sort).limit(limit).skip(offset).toArray();
             res.json({
                 data: todos,

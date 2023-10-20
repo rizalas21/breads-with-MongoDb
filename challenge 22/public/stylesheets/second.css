@@ -26,8 +26,13 @@ body {
 }
 
 .container {
-  padding: 20px;
+  background-color: whitesmoke;
+}
+
+.container-search {
   background-color: white;
+  padding: 10px;
+  box-shadow: 0px 0px 5px rgb(167, 167, 167);
 }
 
 .search-wrapper {
@@ -117,4 +122,31 @@ body {
   flex-direction: row;
   justify-content: space-between;
   background-color: white;
+}
+
+.search-input-wrapper {
+  background-color: white;
+  margin: 20px 0px 20px 0px;
+  display: inline-flex;
+  height: 33px;
+  width: 100%;
+  justify-content: center;
+}
+
+.container-todo {
+  background-color: white;
+  margin: 20px 0px 20px 0px;
+  display: inline-flex;
+  height: 33px;
+  width: 100%;
+  justify-content: center;
+}
+
+.container-todo {
+  background-color: aqua;
+}
+
+.input-search {
+  width: 93%;
+  border-radius: 5px;
 }
