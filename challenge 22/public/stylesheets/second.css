@@ -134,19 +134,24 @@ body {
 }
 
 .container-todo {
-  background-color: white;
+  background-color: #ffff;
   margin: 20px 0px 20px 0px;
   display: inline-flex;
+  flex-direction: column;
   height: 33px;
   width: 100%;
   justify-content: center;
 }
 
-.container-todo {
-  background-color: aqua;
-}
-
 .input-search {
   width: 93%;
   border-radius: 5px;
+}
+
+.data-show {
+  background-color: whitesmoke;
+  display: inline-flex;
+  margin: 13px 0px 13px 0px;
+  padding: 0px 10px 0px 10px;
+  box-shadow: 5px 0px 5px rgb(167, 167, 167);
 }

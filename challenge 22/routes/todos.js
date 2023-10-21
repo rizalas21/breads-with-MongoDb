@@ -16,9 +16,9 @@ module.exports = function (db) {
             const params = {}
 
 
-            if (executor) params['executor'] = new Object(executor)
+            if (executor) params['executor'] = new ObjectId(executor)
             if (title) params['title'] = new RegExp(title, 'i')
-            if (complete) params['complete'] = JSON.parse(complete)
+            if (complete) params['complete'] = complete
             if (strdeadline && enddeadline) {
                 params['deadline'] = {deadline: {$gt: new Date(strdeadline), $lt: new Date (enddeadline)}}
             } else if (strdeadline) {
@@ -32,8 +32,8 @@ module.exports = function (db) {
             const total = await Todo.count(params)
             const pages = Math.ceil(total / limit)
 
-            console.log('ini params =>',params)
-             
+            console.log('ini params => ', params)
+            
             const todos = await Todo.find(params).sort(sort).limit(limit).skip(offset).toArray();
             res.json({
                 data: todos,

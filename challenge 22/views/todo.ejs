@@ -8,19 +8,19 @@
                 <div class="search-wrapper">
                     <div class="title-search">
                         <label for="title">Title</label>
-                        <input class="input" type="text" placeholder="insert your title">
+                        <input oninput="find()" id="title" class="input" type="text" placeholder="insert your title">
                     </div>
                     <div class="deadline-search">
                         <label for="deadline">Deadline</label>
                         <div class="str-end">
-                            <input class="input" type="date">&nbsp;
+                            <input id="strDate" class="input" type="date">&nbsp;
                             <p>s.d.</p>&nbsp;
-                            <input class="input" type="date">
+                            <input id="endDate" class="input" type="date">
                         </div>
                     </div>
                     <div class="complete-search">
                         <label for="complete">Complete</label>
-                        <select class="input" style="background-color: #ffffff;" name="complete" id="complete-choose">
+                        <select id="complete" class="input" style="background-color: #ffffff;" name="complete" id="complete-choose" >
                             <option value="true">Done</option>
                             <option value="false">Not Yet</option>
                         </select>
@@ -38,15 +38,15 @@
                             <span class="ms-3 fw-bold">sort by deadline</span>
                         </div>
                         <div class="input">
-                            <button class="btn btn-warning"><i class="fa-solid fa-arrows-rotate"></i></button>&nbsp;
-                            <button class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            <button type="button" onclick="findReset()" class="btn btn-warning"><i class="fa-solid fa-arrows-rotate"></i></button>&nbsp;
+                            <button type="button" onclick="find()" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="search-input-wrapper">
-                <input type="text" class="input-search">&nbsp;
-                <button class="btn btn-outline-primary"><i class="fa-solid fa-circle-arrow-down"
+                <input id="add-title" type="text" class="input-search">&nbsp;
+                <button onclick="addData()" class="btn btn-outline-primary"><i class="fa-solid fa-circle-arrow-down"
                         style="color: #3584e4;"></i></button>
             </div>
             <div class="container-todo" id="todo-list">
