@@ -10,13 +10,13 @@ module.exports = function (db) {
     // GET users
     router.get('/', async function (req, res, next) {
         try {
-            const { page = 1, title, complete, strdeadline, enddeadline, sortBy = '_id', sortMode, limit = 10, executor } = req.query
+            const { page = 10, title, complete, strdeadline, enddeadline, sortBy = '_id', sortMode, limit = 10, executor } = req.query
             const sort = {}
             sort[sortBy] = sortMode
             const params = {}
 
 
-            if (executor) params['executor'] = executor
+            if (executor) params['executor'] = new Object(executor)
             if (title) params['title'] = new RegExp(title, 'i')
             if (complete) params['complete'] = JSON.parse(complete)
             if (strdeadline && enddeadline) {
@@ -31,6 +31,8 @@ module.exports = function (db) {
 
             const total = await Todo.count(params)
             const pages = Math.ceil(total / limit)
+
+            console.log('ini params =>',params)
              
             const todos = await Todo.find(params).sort(sort).limit(limit).skip(offset).toArray();
             res.json({
