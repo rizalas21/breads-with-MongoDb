@@ -10,7 +10,7 @@ module.exports = function (db) {
     // GET users
     router.get('/', async function (req, res, next) {
         try {
-            const { page = 1, title, complete = false, strdeadline, enddeadline, sortBy = '_id', sortMode, limit = 5, executor } = req.query
+            const { page, title, complete = false, strdeadline, enddeadline, sortBy = '_id', sortMode, limit = 5, executor } = req.query
             const sort = {}
             sort[sortBy] = sortMode
             const params = {}
