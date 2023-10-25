@@ -13,6 +13,8 @@ body {
 .container-list {
   width: 80%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   box-shadow: 0px 0px 5px rgb(167, 167, 167);
@@ -20,13 +22,10 @@ body {
 
 .h1-wrapper {
   background-color: whitesmoke;
+  width: 100%;
   box-shadow: 0px 0px 5px rgb(167, 167, 167);
   text-align: center;
   padding: 10px;
-}
-
-.container {
-  background-color: whitesmoke;
 }
 
 .container-search {
@@ -149,9 +148,41 @@ body {
 }
 
 .data-show {
-  background-color: whitesmoke;
+  background-color: white;
   display: inline-flex;
   margin: 13px 0px 13px 0px;
   padding: 0px 10px 0px 10px;
   box-shadow: 5px 0px 5px rgb(167, 167, 167);
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 70%;
+}
+
+.form-add {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 20px 10px 10px;
+  width: 100%;
+}
+
+.input-complete-edit {
+  width: 8%;
+  height: 70%;
+  display: inline-flex;
+}
+
+.ulabel-title {
+  margin-right: 99px;
+}
+
+.ulabel-deadline {
+  margin-right: 68px;
+}
+
+.ulabel-complete {
+  margin-right: 63px;
 }

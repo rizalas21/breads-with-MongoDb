@@ -1,53 +1,100 @@
-let title = '', complete = '', strdeadline = '', enddeadline = '', sortBy = '_id', sortMode = 'desc', limit = 10, executor = executorId, deadline = null, todoId = null
+let title = '', complete = '', strdeadline = '', enddeadline = '', sortBy = '_id', sortMode = 'desc', limit = 5, executor = executorId, deadline = null, todoId = null, id = null
+
 
 function setExecutor(userId) {
     executor = userId
     readData()
 }
 
-async function find() {
+function setId(_id) {
+    id = _id
+    console.log(`${'id'}`)
+}
+
+//scroll pagination
+$(window).scroll(function() {
+    if($(window).scrollTop() == $(document).height() - $(window).height()) {
+           readData()
+    }
+});
+//scroll pagination done
+
+const deleteForm = new bootstrap.Modal('#deleteData', {
+    keyboard: false
+})
+
+const updateForm = new bootstrap.Modal('#updateData', {
+    keyboard: false
+})
+
+function find() {
+    title = $("#title").val();
+    strdeadline = $("#strDate").val();
+    enddeadline = $("#endDate").val();
+    complete = $("#complete").val() ? $("#complete").val() : '';
+    readData()
+}
+
+async function findReset() {
     try {
-        let getTitle = $("#title").val();
-        title = getTitle.toString()
-        strdeadline = $("#strDate").val();
-        enddeadline = $("#endDate").val();
-        complete = $("#complete").val();
+        title = ''
+        strdeadline = ''
+        enddeadline = ''
         readData()
     } catch (error) {
         console.log('ini errornya =>', error)
     }
 }
 
-async function findReset() {
-    try {
-        let getSearch = $("#title").val("")
-        title = getSearch.toString()
-        strdeadline = $("#strDate").val("")
-        enddeadline = $("#endDate").val("")
-        complete = $("#complete").val("")
-        readData()
-    } catch (error) {
-        console.log('ini errornya =>', error)
-    }
+const sortDeadlineAsc = (deadline) => {
+    sortBy = deadline
+    sortMode = 'asc'
+    let sortasc = `
+    <button type="button" class="btn p-0" onclick="sortDeadlineDesc('deadline')">
+        <div class="d-inline-block position-relative" style="height: 10px;">
+            <i class="fa-solid fa-caret-up position-absolute bottom-0 start-0 p-0"></i>
+        </div>
+    </button>
+    <span class="ms-3 fw-bold">deadline</span>
+  `
+    document.getElementById(`btn-${deadline}`).innerHTML = sortasc
+    readData()
+}
+
+const sortDeadlineDesc = (deadline) => {
+    sortBy = deadline
+    sortMode = 'desc'
+    let sortdesc = `
+    <button type="button" class="btn p-0" onclick="sortDeadlineAsc('deadline')">
+        <div class="d-inline-block position-relative" style="height: 10px;">
+            <i class="fa-solid fa-caret-down position-absolute bottom-0 start-0 p-0"></i>
+        </div>
+    </button>
+    <span class="ms-3 fw-bold">deadline</span>
+  `
+    document.getElementById(`btn-${deadline}`).innerHTML = sortdesc
+    readData()
 }
 
 const readData = async (page = 1) => {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/todos/?executor=${executor}&page=${page}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}`
-        );
+            `http://localhost:3000/api/todos/?executor=${executor}&page=${page}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
+        );  
         const todos = await response.json();
+        console.log('ini todos => ', todos, 'ini response => ', response)
         let html = "";
         let pagination = "";
         let pageNumber = "";
         const offset = todos.offset
 
         todos.data.forEach((item, index) => {
+            console.log('ini deadline => ',item.deadline)
             html += `
-            <div class="data-show ${item.complete ? ' bg-success-subtle' : ' --bs-body-bg'}">
-                <span class="form-control border-0 bg-transparent ps-0">${item.deadline} ${item.title}</span>
-                <button type="button" class="btn p-1" ><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
-                <button type="button" class="btn p-1" ><i class="fa-solid fa-trash"></i></button>
+            <div class="data-show ${item.complete == false && new Date().getTime() > new Date(`${item.deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
+                <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, h:mm')} ${item.title}</span>
+                <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
+                <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
             </div>
           `
         })
@@ -74,4 +121,51 @@ const addData = async () => {
 
     } catch (err) { console.log(err) }
 }
+
+const deleteData = async () => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/todos/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const todos = await response.json();
+
+        readData()
+        deleteForm.hide()
+    } catch (err) { console.log(err) }
+}
+
+const getData = async (_id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/todos/${_id}`);
+        const todo = await response.json()
+        const todoComplete = JSON.parse(todo.complete)
+        todoId = _id
+        $('#utitle').val(todo.title)
+        $('#udeadline').val(moment(todo.deadline).format('YYYY-MM-DDThh:mm'))
+        $('#ucomplete').val(todoComplete)
+        updateForm.show()
+    } catch (error) { console.log('ini errornya => ', error) }
+}
+
+const updateData = async () => {
+    const title = $('#utitle').val()
+    const deadline = $('#udeadline').val()
+    const complete = $('#ucomplete').prop("checked")
+    const response = await fetch(`http://localhost:3000/api/todos/${todoId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, deadline, complete }),
+    })
+    const todos = await response.json();
+
+    readData()
+    updateForm.hide()
+}
+
 readData()
+

@@ -20,15 +20,17 @@
                     </div>
                     <div class="complete-search">
                         <label for="complete">Complete</label>
-                        <select id="complete" class="input" style="background-color: #ffffff;" name="complete" id="complete-choose" >
-                            <option value="true">Done</option>
+                        <select id="complete" class="input" style="background-color: #ffffff;" name="complete"
+                            id="complete-choose">
+                            <option disabled selected>-select complete-</option>
                             <option value="false">Not Yet</option>
+                            <option value="true">Done</option>
                         </select>
                     </div>
                     <div class="complete-search">
-                        <div class="btn btn-success">
-                            <button type="button" class="btn p-0" onclick="sortNameAsc('name')">
-                                <div class="d-inline-block position-relative" style="height: 10px;">
+                        <div class="btn btn-success" id="btn-deadline">
+                            <button id="sortDeadline" type="button" class="btn p-0" onclick="sortDeadlineAsc('deadline')">
+                                <div  class="d-inline-block position-relative" style="height: 10px;">
                                     <i class="fa-solid fa-caret-up position-absolute bottom-0 start-0 p-0"
                                         style="color: #ffffff;"></i>
                                     <i class="fa-solid fa-caret-down position-absolute top-0 start-0 p-0"
@@ -38,8 +40,10 @@
                             <span class="ms-3 fw-bold">sort by deadline</span>
                         </div>
                         <div class="input">
-                            <button type="button" onclick="findReset()" class="btn btn-warning"><i class="fa-solid fa-arrows-rotate"></i></button>&nbsp;
-                            <button type="button" onclick="find()" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            <button type="button" onclick="findReset()" class="btn btn-warning"><i
+                                    class="fa-solid fa-arrows-rotate"></i></button>&nbsp;
+                            <button type="button" onclick="find()" class="btn btn-info"><i
+                                    class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                     </div>
                 </div>
@@ -54,6 +58,62 @@
             </div>
         </div>
     </div>
+
+    <!-- ini untuk Delete -->
+    <div class="modal fade" id="deleteData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Comfirmation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>are you sure?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button id="btn-delete" type="submit" class="btn btn-primary" onclick="deleteData()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- delete selesai  -->
+
+    <!-- ini untuk update -->
+    <div class="modal fade" id="updateData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update Todo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-container" id="form-user">
+                        <div class="form-add">
+                            <label class="ulabel-title" for="title">Title</label>
+                            <input class="input-add" type="text" id="utitle" required>
+                        </div>
+                        <div class="form-add">
+                            <label class="ulabel-deadline" for="deadline">Deadline</label>
+                            <input class="input-add" type="datetime-local" id="udeadline" required>
+                        </div>
+                        <div class="form-add">
+                            <label class="ulabel-complete" for="complete">Complete</label>
+                            <div class="input-complete-edit">
+                                <input type="checkbox" name="complete" id="ucomplete" value="true">
+                                Done
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="btn-update" type="button" onclick="updateData()" class="btn btn-primary">Save change</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- update selesai  -->
     <script>
         let executorId = "<%= id %>"
 

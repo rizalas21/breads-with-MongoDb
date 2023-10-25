@@ -122,14 +122,12 @@ const readData = async (page = 1) => {
         const response = await fetch(
             `http://localhost:3000/api/users/?page=${page}&limit=${limit}&search=${search}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
-        console.log('ini response', response)
         const users = await response.json();
         let html = '';
         let pagination = "";
         let pageNumber = "";
         const offset = users.offset
         users.data.forEach((item, index) => {
-            console.log(item)
             html += `
           <tr>
               <th class="number" scope="row">${index + offset + 1}</th>
@@ -196,7 +194,6 @@ const getData = async (id) => {
     try {
         const response = await fetch(`http://localhost:3000/api/users/${id}`);
         const user = await response.json()
-        console.log('user', user)
         setId(user._id)
         document.getElementById('uname').value = user.name
         document.getElementById('uphone').value = user.phone
@@ -221,8 +218,8 @@ const updateData = async () => {
     })
     const users = await response.json();
 
-    readData()
     updateForm.hide()
+    readData()
 }
 
 const deleteData = async () => {
