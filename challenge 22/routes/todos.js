@@ -21,10 +21,12 @@ module.exports = function (db) {
             if (strdeadline && enddeadline) {
                 params['deadline'] = {deadline: {$gt: new Date(strdeadline), $lt: new Date (enddeadline)}}
             } else if (strdeadline) {
-                params['deadline'] = { $gte: new Date(strdeadline) }
+                params['deadline'] = { $gte: strdeadline }
             } else if (enddeadline) {
-                params['deadline'] = { $lte: new Date (enddeadline) }
+                params['deadline'] = { $lte: enddeadline }
             }
+
+            console.log('params => ', params)
 
             const offset = (page - 1) * limit
 
@@ -61,7 +63,7 @@ module.exports = function (db) {
         try {
             const { title, executor } = req.body
             const user = await User.findOne({ _id: new ObjectId(executor) })
-            const todos = await Todo.insertOne({title, complete: false, deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), executor: user._id})
+            const todos = await Todo.insertOne({title, complete: false, deadline: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), executor: user._id})
             res.status(201).json(todos)
         } catch (err) {
             res.status(500).json({ err })
