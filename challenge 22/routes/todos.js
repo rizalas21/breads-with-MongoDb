@@ -90,7 +90,7 @@ module.exports = function (db) {
     router.put('/:id', async function (req, res, next) {
         try {
             const { title, deadline, complete } = req.body
-            console.log('ini complete => ', complete)
+            console.log('ini deadline => ', deadline)
             const id = req.params.id
             const todos = await Todo.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { title: title, deadline: deadline, complete: complete } })
             if(todos) {

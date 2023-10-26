@@ -172,13 +172,12 @@ const addData = async () => {
             body: JSON.stringify({ title, executor }),
         })
         const todos = await response.json();
-        let td;
 
         $("#todo-list").prepend(`
             <div id="data-show${todos.insertedId}" class="data-show ${todos.complete == false && new Date().getTime() > new Date(`${todos.deadline}`).getTime() ? 'bg-danger-subtle' : todos.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
-                <span class="form-control border-0 bg-transparent ps-0"> ${moment(new Date(Date.now())).format('DD-MM-YYYY, h:mm')} ${title}</span>
+                <span class="form-control border-0 bg-transparent ps-0"> ${moment(new Date(Date.now() + 24 * 60 * 60 * 1000)).format('DD-MM-YYYY, h:mm')} ${title}</span>
                 <button type="button" class="btn p-1" onclick="getData('${todos.insertedId}')"  data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
-                <button type="button" class="btn p-1"  data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
+                <button type="button" class="btn p-1" onclick="setId('${todos.insertedId}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
             </div>
           `)
         $("#add-title").val('');
@@ -206,7 +205,6 @@ const getData = async (_id) => {
         const todo = await response.json()
         const todoComplete = JSON.parse(todo.complete)
         todoId = _id
-        console.log('ini id => ', todoId)
         $('#utitle').val(todo.title)
         $('#udeadline').val(moment(todo.deadline).format('YYYY-MM-DDThh:mm'))
         $('#ucomplete').prop("checked", todoComplete)
