@@ -151,7 +151,11 @@ const readData = async (page = 1) => {
         for (let i = 1; i <= users.pages; i++) {
             pageNumber += `<button class="page-link ${(page == i) ? ' active' : ''}" id="button-pagination" onclick="changePage(${i})">${i}</button>`
         }
-        pagination = `
+
+        if (document.getElementById('limit').value == 0) {
+            pagination = ''
+        } else {
+            pagination = `
         <div class="mx-3">
             <span>showing ${users.offset + 1} to ${limit} of ${users.total} entries</span>
                 <div class="bpage">
@@ -161,6 +165,7 @@ const readData = async (page = 1) => {
                 </div>
         </div>
         `
+        }
         document.getElementById('pagination').innerHTML = pagination
 
         document.getElementById('users-table-tbody').innerHTML = html
