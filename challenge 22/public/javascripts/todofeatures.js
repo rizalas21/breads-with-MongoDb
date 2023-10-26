@@ -34,8 +34,6 @@ async function find() {
     title = $("#title").val();
     strdeadline = $("#strDate").val();
     enddeadline = $("#endDate").val();
-    complete = $("#complete").val() ? $("#complete").val() : '';
-console.log('ini strdeadline => ', strdeadline)
 
     const response = await fetch(
         `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
@@ -60,11 +58,33 @@ console.log('ini strdeadline => ', strdeadline)
 async function findReset() {
     try {
         title = ''
+        $("#title").html('')
         strdeadline = ''
+        $("#strdeadline").html('')
         enddeadline = ''
-        complete = ''
+        $("#enddeadline").html('')
+        const response = await fetch(
+            `http://localhost:3000/api/todos/?executor=${executor}&page=1&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
+        );
+        const todos = await response.json();
+        console.log('ini todos => ', todos)
+        let html = "";
+        const offset = todos.offset
+
+        todos.data.forEach((item, index) => {
+            html += `
+            <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${item.deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
+                <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, h:mm')} ${item.title}</span>
+                <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
+                <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          `
+        })
+
+        $("#todo-list").html(html);
         readData()
     } catch (error) {
+        html
         console.log('ini errornya =>', error)
     }
 }
@@ -104,10 +124,10 @@ const sortDeadlineAsc = async (deadline) => {
 }
 
 const sortDeadlineDesc = async (deadline) => {
-    try{
-    sortBy = deadline
-    sortMode = 'desc'
-    let sortdesc = `
+    try {
+        sortBy = deadline
+        sortMode = 'desc'
+        let sortdesc = `
     <button type="button" class="btn p-0" onclick="sortDeadlineAsc('deadline')">
         <div class="d-inline-block position-relative" style="height: 10px;">
             <i class="fa-solid fa-caret-down position-absolute bottom-0 start-0 p-0"></i>
@@ -115,7 +135,7 @@ const sortDeadlineDesc = async (deadline) => {
     </button>
     <span class="ms-3 fw-bold">deadline</span>
   `
-    $(`#btn-${deadline}`).html(sortdesc)
+        $(`#btn-${deadline}`).html(sortdesc)
         const response = await fetch(
             `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
@@ -134,7 +154,7 @@ const sortDeadlineDesc = async (deadline) => {
             $("#todo-list").html(html);
 
         })
-    } catch(err){console.log('ini errornya bro => ', err)}
+    } catch (err) { console.log('ini errornya bro => ', err) }
 }
 
 const readData = async () => {
@@ -221,7 +241,7 @@ const updateData = async () => {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, deadline, complete : Boolean(complete) }),
+        body: JSON.stringify({ title, deadline, complete: Boolean(complete) }),
     })
     const todos = await response.json();
 

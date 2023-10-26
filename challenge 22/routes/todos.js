@@ -15,6 +15,8 @@ module.exports = function (db) {
             sort[sortBy] = sortMode
             const params = {}
 
+            console.log(page)
+
             if (executor) params['executor'] = new ObjectId(executor)
             if (title) params['title'] = new RegExp(title, 'i')
             if (complete) params['complete'] = JSON.parse(complete)
@@ -26,13 +28,11 @@ module.exports = function (db) {
                 params['deadline'] = { $lte: enddeadline }
             }
 
-            console.log('params => ', params)
-
             const offset = (page - 1) * limit
 
             const total = await Todo.count(params)
             const pages = Math.ceil(total / limit)
-
+            console.log(limit, offset)
             const todos = await Todo.find(params).sort(sort).limit(limit).skip(offset).toArray();
             res.json({
                 data: todos,
@@ -42,7 +42,6 @@ module.exports = function (db) {
                 limit
             })
         } catch (err) {
-            console.log(err)
             res.status(500).json({ err })
         }
     });
@@ -90,7 +89,6 @@ module.exports = function (db) {
     router.put('/:id', async function (req, res, next) {
         try {
             const { title, deadline, complete } = req.body
-            console.log('ini deadline => ', deadline)
             const id = req.params.id
             const todos = await Todo.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { title: title, deadline: deadline, complete: complete } })
             if(todos) {
