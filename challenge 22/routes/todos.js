@@ -10,30 +10,36 @@ module.exports = function (db) {
     // GET users
     router.get('/', async function (req, res, next) {
         try {
-            const { page, title, complete = false, strdeadline, enddeadline, sortBy = '_id', sortMode, limit = 5, executor } = req.query
+            const { page = 1, title, complete = false, startdateDeadline, enddateDeadline, sortBy = '_id', sortMode, limit = 5, executor } = req.query
             const sort = {}
             sort[sortBy] = sortMode
             const params = {}
 
-            console.log(page)
 
             if (executor) params['executor'] = new ObjectId(executor)
             if (title) params['title'] = new RegExp(title, 'i')
             if (complete) params['complete'] = JSON.parse(complete)
-            if (strdeadline && enddeadline) {
-                params['deadline'] = {deadline: {$gt: new Date(strdeadline), $lt: new Date (enddeadline)}}
-            } else if (strdeadline) {
-                params['deadline'] = { $gte: strdeadline }
-            } else if (enddeadline) {
-                params['deadline'] = { $lte: enddeadline }
+            if (startdateDeadline && enddateDeadline) {
+                const enddateTime = new Date(enddateDeadline)
+                enddateTime.setHours(23, 59, 59)
+                params['deadline'] = { $gte: new Date(startdateDeadline), $lte: enddateTime }
+            } else if (startdateDeadline) {
+                params['deadline'] = { $gte: new Date(startdateDeadline) }
+            } else if (enddateDeadline) {
+                const enddateTime = new Date(enddateDeadline)
+                enddateTime.setHours(23, 59, 59)
+                params['deadline'] = { $lte: enddateTime }
             }
+
+            console.log('ini enddeadline', enddateDeadline)
+
 
             const offset = (page - 1) * limit
 
-            const total = await Todo.count(params)
+            const data = await Todo.find(params).toArray()
+            const total = data.length
             const pages = Math.ceil(total / limit)
-            console.log(limit, offset)
-            const todos = await Todo.find(params).sort(sort).limit(limit).skip(offset).toArray();
+            const todos = await Todo.find(params).sort(sort).limit(parseInt(limit)).skip(offset).toArray();
             res.json({
                 data: todos,
                 total,
@@ -61,9 +67,22 @@ module.exports = function (db) {
     router.post('/', async function (req, res, next) {
         try {
             const { title, executor } = req.body
+            const date = new Date()
+            date.setDate(date.getDate() + 1)
             const user = await User.findOne({ _id: new ObjectId(executor) })
-            const todos = await Todo.insertOne({title, complete: false, deadline: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), executor: user._id})
-            res.status(201).json(todos)
+            const newTodo = await Todo.insertOne({ title, complete: false, deadline: date, executor: user._id })
+            if (newTodo.acknowledged) {
+                const insertedId = newTodo.insertedId
+                const todo = await Todo.findOne({ _id: insertedId })
+                if (todo) {
+                    res.status(201).json(todo)
+                } else {
+                    res.status(500).json({ message: 'error get new data todo', err })
+                }
+            } else {
+                res.status(500).json({ message: 'error add data' })
+            }
+
         } catch (err) {
             res.status(500).json({ err })
         }
@@ -75,10 +94,10 @@ module.exports = function (db) {
             const id = req.params.id
             const todos = await Todo.findOneAndDelete({ _id: new ObjectId(id) })
 
-            if(todos) {
+            if (todos) {
                 res.status(200).json(todos)
             } else {
-                res.status(500).json({ message: 'Todo Not Found'})
+                res.status(500).json({ message: 'Todo Not Found' })
             }
         } catch (err) {
             res.status(500).json({ err })
@@ -90,12 +109,9 @@ module.exports = function (db) {
         try {
             const { title, deadline, complete } = req.body
             const id = req.params.id
-            const todos = await Todo.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { title: title, deadline: deadline, complete: complete } })
-            if(todos) {
-                res.status(201).json(todos)
-            } else {
-                res.status(500).json({message: `Todo Not Found`})
-            }
+            await Todo.updateOne({ _id: new ObjectId(id) }, { $set: { title: title, deadline: new Date(deadline), complete: JSON.parse(complete) } })
+            const updatedTodo = await Todo.findOne({ _id: new ObjectId(id) })
+            res.status(201).json(updatedTodo)
         } catch (err) {
             res.status(500).json({ err })
         }

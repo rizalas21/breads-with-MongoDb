@@ -1,7 +1,8 @@
 let id = null;
 let limit = document.getElementById('limit').value || 10;
-let search = '';
+let query = '';
 let sortBy = '_id', sortMode = 'desc'
+let page = 1
 
 function setId(_id) {
     id = _id
@@ -37,7 +38,7 @@ document.getElementById('btn-update').addEventListener('click', function (event)
 async function find() {
     try {
         let getSearch = document.getElementById("input-search").value;
-        search = getSearch.toString()
+        query = getSearch.toString()
         readData()
     } catch (error) {
         console.log('ini errornya =>', error)
@@ -46,7 +47,7 @@ async function find() {
 
 async function reset() {
     try {
-        search = document.getElementById("input-search").value = "";
+        query = document.getElementById("input-search").value = "";
         readData()
     } catch (err) {
         console.log('ini error nya bro => ', err)
@@ -120,7 +121,7 @@ const sortNameDesc = (name) => {
 const readData = async (page = 1) => {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/users/?page=${page}&limit=${limit}&search=${search}&sortBy=${sortBy}&sortMode=${sortMode}`
+            `http://localhost:3000/api/users/?page=${page}&limit=${limit}&query=${query}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
         const users = await response.json();
         let html = '';
@@ -157,7 +158,7 @@ const readData = async (page = 1) => {
         } else {
             pagination = `
         <div class="mx-3">
-            <span>showing ${users.offset + 1} to ${limit} of ${users.total} entries</span>
+            <span>showing ${users.offset + 1} to ${(Number(users.limit) + Number(users.offset)) >= Number(users.total) ? Number(users.total) : Number(users.limit) + (users.offset)} of ${users.total} entries</span>
                 <div class="bpage">
                     ${users.page == 1 ? '' : '<button onclick="changePage(page - 1)" class="page-link">&laquo;</button>'} 
                     ${pageNumber}

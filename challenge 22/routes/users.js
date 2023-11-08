@@ -9,13 +9,13 @@ module.exports = function (db) {
   // GET users
   router.get('/', async function (req, res, next) {
     try {
-      const { page = 1, limit, search = '', sortBy  , sortMode } = req.query
+      const { page = 1, limit = 5, query = '', sortBy, sortMode } = req.query
       const sort = {}
       sort[sortBy] = sortMode == 'asc' ? 1 : -1
       const params = {}
 
-      if (search) {
-        params['$or'] = [{ "name": new RegExp(search, 'i') }, { "phone": new RegExp(search, 'i') }]
+      if (query) {
+        params['$or'] = [{ "name": new RegExp(query, 'i') }, { "phone": new RegExp(query, 'i') }]
       }
 
       const offset = (page - 1) * limit
@@ -52,8 +52,18 @@ module.exports = function (db) {
   router.post('/', async function (req, res, next) {
     try {
       const { name, phone } = req.body
-      const users = await User.insertOne({ name, phone })
-      res.status(201).json(users)
+      const newUser = await User.insertOne({ name, phone })
+      if (newUser.acknowledged) {
+        const insertedId = newUser.insertedId
+        const user = await User.findOne({ _id: insertedId })
+        if (user) {
+          res.status(201).json(user)
+        } else {
+          res.status(500).json({ message: 'error get new data' })
+        }
+      } else {
+        res.status(500).json({ message: 'error add data' })
+      }
     } catch (err) {
       res.status(500).json({ err })
     }
@@ -63,8 +73,8 @@ module.exports = function (db) {
   router.delete('/:id', async function (req, res, next) {
     try {
       const id = req.params.id
-      const users = await User.findOneAndDelete({ _id: new ObjectId(id) })
-      res.status(200).json(users)
+      const user = await User.findOneAndDelete({ _id: new ObjectId(id) })
+      res.status(200).json(user)
     } catch (err) {
       res.status(500).json({ err })
     }
@@ -75,8 +85,9 @@ module.exports = function (db) {
     try {
       const { name, phone } = req.body
       const id = req.params.id
-      const users = await User.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { name: name, phone: phone } })
-      res.status(201).json(users)
+      await User.updateOne({ _id: new ObjectId(id) }, { $set: { name: name, phone: phone } })
+      const updatedUser = await User.findOne({_id: new ObjectId(id)})
+      res.status(201).json(updatedUser)
     } catch (err) {
       res.status(500).json({ err })
     }

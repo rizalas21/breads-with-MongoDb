@@ -1,6 +1,6 @@
 
 
-let title = '', page = 1, complete = '', strdeadline = '', enddeadline = '', sortBy = '_id', sortMode = 'desc', limit = 5, executor = executorId, deadline = null, todoId = null, id = null
+let title = '', page = 1, complete = '', startdateDeadline = '', enddateDeadline = '', sortBy = '_id', sortMode = 'desc', limit = 5, executor = executorId, deadline = null, todoId = null, id = null
 
 
 function setExecutor(userId) {
@@ -9,7 +9,7 @@ function setExecutor(userId) {
 }
 
 function setId(_id) {
-    id = _id
+    id = _id 
     console.log(`${'id'}`)
 }
 
@@ -32,20 +32,21 @@ const updateForm = new bootstrap.Modal('#updateData', {
 
 async function find() {
     title = $("#title").val();
-    strdeadline = $("#strDate").val();
-    enddeadline = $("#endDate").val();
+    startdateDeadline = $("#strDate").val();
+    enddateDeadline = $("#endDate").val();
 
     const response = await fetch(
-        `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
+        `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
     );
     const todos = await response.json();
+    console.log('ini todos => ', todos)
     let html = "";
     const offset = todos.offset
 
     todos.data.forEach((item, index) => {
         html += `
         <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
-            <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, h:mm')} ${item.title}</span>
+            <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, HH:mm')} ${item.title}</span>
             <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
             <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
         </div>
@@ -57,24 +58,24 @@ async function find() {
 
 async function findReset() {
     try {
+        page = 1
         title = ''
         $("#title").html('')
-        strdeadline = ''
-        $("#strdeadline").html('')
-        enddeadline = ''
-        $("#enddeadline").html('')
+        startdateDeadline = ''
+        $("#startdateDeadline").html('')
+        enddateDeadline = ''
+        $("#enddateDeadline").html('')
         const response = await fetch(
-            `http://localhost:3000/api/todos/?executor=${executor}&page=1&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
+            `http://localhost:3000/api/todos/?executor=${executor}&page=${page}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
         const todos = await response.json();
-        console.log('ini todos => ', todos)
         let html = "";
         const offset = todos.offset
 
         todos.data.forEach((item, index) => {
             html += `
             <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${item.deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
-                <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, h:mm')} ${item.title}</span>
+                <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, HH:mm')} ${item.title}</span>
                 <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
                 <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
             </div>
@@ -82,9 +83,7 @@ async function findReset() {
         })
 
         $("#todo-list").html(html);
-        readData()
     } catch (error) {
-        html
         console.log('ini errornya =>', error)
     }
 }
@@ -99,11 +98,11 @@ const sortDeadlineAsc = async (deadline) => {
             <i class="fa-solid fa-caret-up position-absolute bottom-0 start-0 p-0"></i>
         </div>
     </button>
-    <span class="ms-3 fw-bold">deadline</span>
+    <span class="ms-3 fw-bold">sort by deadline</span>
   `
         $(`#btn-${deadline}`).html(sortasc)
         const response = await fetch(
-            `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
+            `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
         const todos = await response.json();
         let html = "";
@@ -112,7 +111,7 @@ const sortDeadlineAsc = async (deadline) => {
         todos.data.forEach((item, index) => {
             html += `
         <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${item.deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
-            <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, h:mm')} ${item.title}</span>
+            <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, HH:mm')} ${item.title}</span>
             <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
             <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
         </div>
@@ -133,11 +132,11 @@ const sortDeadlineDesc = async (deadline) => {
             <i class="fa-solid fa-caret-down position-absolute bottom-0 start-0 p-0"></i>
         </div>
     </button>
-    <span class="ms-3 fw-bold">deadline</span>
+    <span class="ms-3 fw-bold">sort by deadline</span>
   `
         $(`#btn-${deadline}`).html(sortdesc)
         const response = await fetch(
-            `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
+            `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
         const todos = await response.json();
         let html = "";
@@ -146,7 +145,7 @@ const sortDeadlineDesc = async (deadline) => {
         todos.data.forEach((item, index) => {
             html += `
         <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${item.deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
-            <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, h:mm')} ${item.title}</span>
+            <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, HH:mm')} ${item.title}</span>
             <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
             <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
         </div>
@@ -160,7 +159,7 @@ const sortDeadlineDesc = async (deadline) => {
 const readData = async () => {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/todos/?executor=${executor}&page=${page}&title=${title}&strdeadline=${strdeadline}&enddeadline=${enddeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
+            `http://localhost:3000/api/todos/?executor=${executor}&page=${page}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
         const todos = await response.json();
         let html = "";
@@ -169,7 +168,7 @@ const readData = async () => {
         todos.data.forEach((item, index) => {
             html += `
             <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${item.deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
-                <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, h:mm')} ${item.title}</span>
+                <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, HH:mm')} ${item.title}</span>
                 <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
                 <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
             </div>
@@ -194,10 +193,10 @@ const addData = async () => {
         const todos = await response.json();
 
         $("#todo-list").prepend(`
-            <div id="data-show${todos.insertedId}" class="data-show ${todos.complete == false && new Date().getTime() > new Date(`${todos.deadline}`).getTime() ? 'bg-danger-subtle' : todos.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
-                <span class="form-control border-0 bg-transparent ps-0"> ${moment(new Date(Date.now() + 24 * 60 * 60 * 1000)).format('DD-MM-YYYY, h:mm')} ${title}</span>
-                <button type="button" class="btn p-1" onclick="getData('${todos.insertedId}')"  data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
-                <button type="button" class="btn p-1" onclick="setId('${todos.insertedId}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
+            <div id="data-show${todos._id}" class="data-show ${todos.complete == false && new Date().getTime() > new Date(`${todos.deadline}`).getTime() ? 'bg-danger-subtle' : todos.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
+                <span class="form-control border-0 bg-transparent ps-0"> ${moment(new Date(Date.now() + 24 * 60 * 60 * 1000)).format('DD-MM-YYYY, HH:mm')} ${title}</span>
+                <button type="button" class="btn p-1" onclick="getData('${todos._id}')"  data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
+                <button type="button" class="btn p-1" onclick="setId('${todos._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
             </div>
           `)
         $("#add-title").val('');
@@ -226,7 +225,7 @@ const getData = async (_id) => {
         const todoComplete = JSON.parse(todo.complete)
         todoId = _id
         $('#utitle').val(todo.title)
-        $('#udeadline').val(moment(todo.deadline).format('YYYY-MM-DDThh:mm'))
+        $('#udeadline').val(moment(todo.deadline).format('YYYY-MM-DDThHH:mm'))
         $('#ucomplete').prop("checked", todoComplete)
         updateForm.show()
     } catch (error) { console.log('ini errornya => ', error) }
@@ -246,7 +245,7 @@ const updateData = async () => {
     const todos = await response.json();
 
     const rubah = `
-        <span class="form-control border-0 bg-transparent ps-0">${moment(deadline).format('DD-MM-YYYY, h:mm')} ${title}</span>
+        <span class="form-control border-0 bg-transparent ps-0">${moment(deadline).format('DD-MM-YYYY, HH:mm')} ${title}</span>
         <button type="button" class="btn p-1" onclick="getData('${todoId}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
         <button type="button" class="btn p-1" onclick="setId('${todoId}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
   `
