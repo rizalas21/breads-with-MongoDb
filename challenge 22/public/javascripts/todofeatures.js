@@ -34,7 +34,11 @@ async function find() {
     title = $("#title").val();
     startdateDeadline = $("#strDate").val();
     enddateDeadline = $("#endDate").val();
-    $("#complete").val() == null ? complete = '' : complete = $("#complete").val()
+    if($("#complete").val() == null || '') {
+        complete = ''
+    } else{
+        complete = $("#complete").val()
+    } 
 
     const response = await fetch(
         `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
@@ -66,6 +70,7 @@ async function findReset() {
         enddateDeadline = ''
         $("#enddateDeadline").html('')
         complete = ''
+        $("#complete").val(0)
         const response = await fetch(
             `http://localhost:3000/api/todos/?executor=${executor}&page=${page}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
@@ -224,9 +229,11 @@ const getData = async (_id) => {
         const response = await fetch(`http://localhost:3000/api/todos/${_id}`);
         const todo = await response.json()
         const todoComplete = JSON.parse(todo.complete)
+        let ubah = todo.deadline
+        console.log('ini todos deadline', new Date(todo.deadline))
         todoId = _id
         $('#utitle').val(todo.title)
-        $('#udeadline').val(moment(todo.deadline).format('YYYY-MM-DDThHH:mm'))
+        $('#udeadline').val(moment(new Date(todo.deadline)).format('YYYY-MM-DDTHH:mm'))
         $('#ucomplete').prop("checked", todoComplete)
         updateForm.show()
     } catch (error) { console.log('ini errornya => ', error) }

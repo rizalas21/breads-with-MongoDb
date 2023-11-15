@@ -39,6 +39,7 @@ async function find() {
     try {
         let getSearch = document.getElementById("input-search").value;
         query = getSearch.toString()
+        page = 1
         readData()
     } catch (error) {
         console.log('ini errornya =>', error)
@@ -118,7 +119,7 @@ const sortNameDesc = (name) => {
     readData()
 }
 
-const readData = async (page = 1) => {
+const readData = async () => {
     try {
         const response = await fetch(
             `http://localhost:3000/api/users/?page=${page}&limit=${limit}&query=${query}&sortBy=${sortBy}&sortMode=${sortMode}`
