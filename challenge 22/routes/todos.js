@@ -10,7 +10,7 @@ module.exports = function (db) {
     // GET users
     router.get('/', async function (req, res, next) {
         try {
-            const { page = 1, title, complete = false, startdateDeadline, enddateDeadline, sortBy = '_id', sortMode, limit = 5, executor } = req.query
+            const { page = 1, title, complete = '', startdateDeadline, enddateDeadline, sortBy = '_id', sortMode, limit = 5, executor } = req.query
             const sort = {}
             sort[sortBy] = sortMode
             const params = {}
@@ -20,19 +20,12 @@ module.exports = function (db) {
             if (title) params['title'] = new RegExp(title, 'i')
             if (complete) params['complete'] = JSON.parse(complete)
             if (startdateDeadline && enddateDeadline) {
-                const enddateTime = new Date(enddateDeadline)
-                enddateTime.setHours(23, 59, 59)
-                params['deadline'] = { $gte: new Date(startdateDeadline), $lte: enddateTime }
+                params['deadline'] = { $gte: new Date(startdateDeadline), $lte: new Date(enddateDeadline) }
             } else if (startdateDeadline) {
                 params['deadline'] = { $gte: new Date(startdateDeadline) }
             } else if (enddateDeadline) {
-                const enddateTime = new Date(enddateDeadline)
-                enddateTime.setHours(23, 59, 59)
-                params['deadline'] = { $lte: enddateTime }
+                params['deadline'] = { $lte: new Date(enddateDeadline) }
             }
-
-            console.log('ini enddeadline', enddateDeadline)
-
 
             const offset = (page - 1) * limit
 
@@ -44,8 +37,8 @@ module.exports = function (db) {
                 data: todos,
                 total,
                 pages,
-                page,
-                limit
+                page: Number(page),
+                limit: Number(limit)
             })
         } catch (err) {
             res.status(500).json({ err })

@@ -9,7 +9,7 @@ function setExecutor(userId) {
 }
 
 function setId(_id) {
-    id = _id 
+    id = _id
     console.log(`${'id'}`)
 }
 
@@ -34,18 +34,18 @@ async function find() {
     title = $("#title").val();
     startdateDeadline = $("#strDate").val();
     enddateDeadline = $("#endDate").val();
+    $("#complete").val() == null ? complete = '' : complete = $("#complete").val()
 
     const response = await fetch(
         `http://localhost:3000/api/todos/?executor=${executor}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
     );
     const todos = await response.json();
-    console.log('ini todos => ', todos)
     let html = "";
     const offset = todos.offset
 
     todos.data.forEach((item, index) => {
         html += `
-        <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
+        <div id="data-show${item._id}" class="data-show ${item.complete == false && new Date().getTime() > new Date(`${item.deadline}`).getTime() ? 'bg-danger-subtle' : item.complete == true ? 'bg-success-subtle' : 'bg-secondary-subtle'}">
             <span class="form-control border-0 bg-transparent ps-0">${moment(item.deadline).format('DD-MM-YYYY, HH:mm')} ${item.title}</span>
             <button type="button" class="btn p-1" onclick="getData('${item._id}')" data-bs-toggle="modal" data-bs-target="#updateData"><i class="fa-sharp fa-solid fa-pencil"></i></button>&nbsp;
             <button type="button" class="btn p-1" onclick="setId('${item._id}')" data-bs-toggle="modal" data-bs-target="#deleteData"><i class="fa-solid fa-trash"></i></button>
@@ -65,6 +65,7 @@ async function findReset() {
         $("#startdateDeadline").html('')
         enddateDeadline = ''
         $("#enddateDeadline").html('')
+        complete = ''
         const response = await fetch(
             `http://localhost:3000/api/todos/?executor=${executor}&page=${page}&title=${title}&startdateDeadline=${startdateDeadline}&enddateDeadline=${enddateDeadline}&complete=${complete}&sortBy=${sortBy}&sortMode=${sortMode}`
         );
@@ -255,4 +256,3 @@ const updateData = async () => {
 }
 
 readData()
-

@@ -28,8 +28,8 @@ module.exports = function (db) {
         data: users,
         total,
         pages,
-        page,
-        limit,
+        page: parseInt(page),
+        limit: parseInt(limit),
         offset
       })
     } catch (err) {
